@@ -23,7 +23,7 @@ const Home = () => {
             <button className='btn'><img src={play_icon} alt="" />Play</button>
             <button className='btn dark-btn'><img src={info_icon} alt="" />More Info</button>
           </div>
-          <TitleCards />
+          <TitleCards/>
         </div>
       </div>
       <div className="more-cards">

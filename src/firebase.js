@@ -1,0 +1,55 @@
+import { initializeApp } from "firebase/app";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { toast } from "react-toastify";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD_-trTSGgGXyU3EkZqKtRqQ-2lI_kmkng",
+  authDomain: "netflix-clone-301ce.firebaseapp.com",
+  projectId: "netflix-clone-301ce",
+  storageBucket: "netflix-clone-301ce.firebasestorage.app",
+  messagingSenderId: "1046466242668",
+  appId: "1:1046466242668:web:68f5f3b5911e1008089049"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// User sign up function
+const signup = async (name, email, password) => {
+  try {
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    await addDoc(collection(db, "user"), {
+      uid:user.uid,
+      name,
+      authProvider:"local",
+      email,
+    })
+
+  } catch (error) {
+    console.log(error);
+    toast.error(error.code.split('/')[1].split('-').join(" "));
+  }
+}
+
+
+// User Login function
+
+const login = async (email,password) => {
+  try {
+    await signInWithEmailAndPassword(auth,email,password);
+  } catch (error) {
+    console.log(error);
+    toast.error(error.code.split('/')[1].split('-').join(" "));
+  }
+}
+
+const logout = () => {
+  signOut(auth);
+}
+
+
+export {auth,db,login,signup,logout}
